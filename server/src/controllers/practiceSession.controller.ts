@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as practiceSessionService from "../../services/practice-session/practiceSession.service";
+import * as practiceSessionService from "../services/practiceSession.service";
 
 // Return all the practice sessions from the requested user
 export const getAllSessions = async (req: Request, res: Response) => {
