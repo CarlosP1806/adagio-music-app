@@ -1,6 +1,7 @@
 export type PracticeSession = {
-  id: string;
+  id: number;
   startTime: Date;
   endTime: Date;
   satisfaction: number;
+  userId: number;
 };

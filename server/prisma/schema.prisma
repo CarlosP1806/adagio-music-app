@@ -14,5 +14,6 @@ model PracticeSession {
   id           Int      @id @default(autoincrement())
   startTime    DateTime @default(now())
   endTime      DateTime 
-  satisfaction Int?
+  satisfaction Int
+  userId       Int
 }
