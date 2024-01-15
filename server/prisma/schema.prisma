@@ -10,10 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  username   String   @unique
+  instrument String
+  experience Experience
+  sessions   PracticeSession[]
+}
+
+enum Experience {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model PracticeSession {
   id           Int      @id @default(autoincrement())
   startTime    DateTime @default(now())
   endTime      DateTime 
   satisfaction Int
   userId       Int
+  user         User     @relation(fields: [userId], references: [id])
 }

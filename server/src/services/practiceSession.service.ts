@@ -1,5 +1,5 @@
-import type { PracticeSession } from "../../constants/types";
-import { db } from "../../db/db.server";
+import type { PracticeSession } from "../constants/types";
+import { db } from "../db/db.server";
 
 // Returns a list of all practice sessions
 export const getAllSessions = async (): Promise<PracticeSession[]> => {
