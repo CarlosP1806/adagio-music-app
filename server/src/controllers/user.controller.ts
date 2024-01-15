@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import * as userService from "../services/user.service";
-import { signToken } from "../utils/auth";
+import { authenticatedRequest, signToken } from "../utils/auth";
 import { User } from "../constants/types";
 
-// @Route   GET /api/users
+// @Route   GET /api/user
 // Creates and logs in a new user
 export const registerUser = async (
   req: Request<{}, {}, User>,
@@ -28,7 +28,7 @@ export const registerUser = async (
   }
 };
 
-// @Route   POST /api/users/login
+// @Route   POST /api/user/login
 // Logs in an existing user
 export const login = async (
   req: Request<{}, {}, { username: string; password: string }>,
@@ -57,6 +57,23 @@ export const login = async (
       sameSite: "lax",
     });
     res.status(200).json({ user, token });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// @Route   GET /api/user/me
+// Gets the current user
+export const getCurrentUser = async (
+  req: authenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user = await userService.getUserById(req.userId as number);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
