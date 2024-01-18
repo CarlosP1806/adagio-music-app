@@ -8,10 +8,10 @@ export const uploadRecording = async (
   res: Response
 ) => {
   if (!req.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
   if (!req.file) {
-    return res.status(400).send("No file uploaded.");
+    return res.status(400).json({ error: "No file uploaded" });
   }
   const file = req.file;
   const recordingData = {
@@ -31,9 +31,9 @@ export const uploadRecording = async (
     );
     await fileService.uploadFile(file);
 
-    res.status(200).json({ message: "File uploaded", data: recording });
+    res.status(200).json(recording);
   } catch (err) {
-    res.status(500).json({ message: "Error uploading recording" });
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
 
@@ -43,7 +43,7 @@ export const getRecording = async (
 ) => {
   const { id } = req.params;
   if (!req.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
@@ -52,12 +52,12 @@ export const getRecording = async (
       req.userId
     );
     if (!isValid) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(403).json({ error: "Unauthorized" });
     }
 
     const recording = await recordingService.getRecordingById(parseInt(id));
     if (!recording) {
-      res.status(404).json({ message: "Recording not found" });
+      res.status(404).json({ error: "Recording not found" });
       return;
     }
 
@@ -70,7 +70,6 @@ export const getRecording = async (
     const url = await fileService.getFileURL(cloudName);
     res.json({ data: recording, url });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: "Error retrieving recording" });
+    res.status(400).json({ error: "An unexpected error occurred" });
   }
 };

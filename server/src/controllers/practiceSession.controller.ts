@@ -7,6 +7,6 @@ export const getAllSessions = async (req: Request, res: Response) => {
     const practiceSessions = await practiceSessionService.getAllSessions();
     return res.status(200).json(practiceSessions);
   } catch (err: any) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
