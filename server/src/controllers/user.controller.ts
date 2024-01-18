@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import * as userService from "../services/user.service";
 import { authenticatedRequest, signToken } from "../utils/auth";
 import { User } from "../constants/types";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-// @Route   GET /api/user
+// @Route   POST /api/user/signup
 // Creates and logs in a new user
 export const registerUser = async (
   req: Request<{}, {}, User>,
@@ -24,7 +25,13 @@ export const registerUser = async (
     });
     res.status(201).json({ user, token });
   } catch (err: any) {
-    return res.status(500).json({ error: err.message });
+    // Check if the error is related to a duplicate entry
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
+      return res
+        .status(400)
+        .json({ error: "Username or email already exists" });
+    }
+    return res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
 
@@ -58,7 +65,7 @@ export const login = async (
     });
     res.status(200).json({ user, token });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
 
@@ -75,6 +82,6 @@ export const getCurrentUser = async (
     }
     res.status(200).json(user);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
