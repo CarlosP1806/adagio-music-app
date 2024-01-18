@@ -18,6 +18,7 @@ model User {
   instrument String
   experience Experience
   sessions   PracticeSession[]
+  recordings Recording[]
 }
 
 enum Experience {
@@ -33,4 +34,14 @@ model PracticeSession {
   satisfaction Int
   userId       Int
   user         User     @relation(fields: [userId], references: [id])
+}
+
+model Recording {
+  id           Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  filename     String
+  alias        String
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  @@unique([userId, filename])
 }
