@@ -16,3 +16,11 @@ export type PracticeSession = {
   satisfaction: number;
   userId: number;
 };
+
+export type Recording = {
+  id: number;
+  filename: string;
+  date: Date;
+  userId: number;
+  alias: string;
+};

@@ -4,10 +4,11 @@ import {
   getRecording,
   uploadRecording,
 } from "../controllers/recording.controller";
+import { authMiddleware } from "../utils/auth";
 
 export const router = Router();
 
 router
   .route("/upload")
-  .post(fileService.upload.single("file"), uploadRecording);
-router.route("/getFile/:fileName").get(getRecording);
+  .post(authMiddleware, fileService.upload.single("file"), uploadRecording);
+router.route("/:id").get(authMiddleware, getRecording);
