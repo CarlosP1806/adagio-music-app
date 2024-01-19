@@ -28,12 +28,29 @@ enum Experience {
 }
 
 model PracticeSession {
-  id           Int      @id @default(autoincrement())
-  startTime    DateTime @default(now())
-  endTime      DateTime 
-  satisfaction Int
-  userId       Int
-  user         User     @relation(fields: [userId], references: [id])
+  id                Int      @id @default(autoincrement())
+  startTime         DateTime @default(now())
+  endTime           DateTime 
+  userId            Int
+  user              User     @relation(fields: [userId], references: [id])
+  duration          Int // in seconds
+
+  // Ratings
+  satisfactionScore Int
+  comfortScore      Int
+  difficultyScore   Int
+  techniqueScore    Int
+  musicalityScore   Int
+
+  notes             Note[]
+}
+
+model Note {
+  id              Int      @id @default(autoincrement())
+  title           String
+  content         String
+  practiceId      Int
+  practiceSession PracticeSession @relation(fields: [practiceId], references: [id])
 }
 
 model Recording {
