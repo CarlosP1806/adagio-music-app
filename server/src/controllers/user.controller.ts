@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import * as userService from "../services/user.service";
 import { authenticatedRequest, signToken } from "../utils/auth";
 import { User } from "../constants/types";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+} from "@prisma/client/runtime/library";
 
 // @Route   POST /api/user/signup
 // Creates and logs in a new user
@@ -69,7 +72,7 @@ export const login = async (
   }
 };
 
-// @Route   GET /api/user/me
+// @Route   GET /api/user/
 // Gets the current user
 export const getCurrentUser = async (
   req: authenticatedRequest,
@@ -82,6 +85,44 @@ export const getCurrentUser = async (
     }
     res.status(200).json(user);
   } catch (err: any) {
+    res.status(500).json({ error: "An unexpected error occurred" });
+  }
+};
+
+// @Route   PUT /api/user/
+// Updates the current user
+export const updateCurrentUser = async (
+  req: authenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user = await userService.updateUser(req.userId as number, req.body);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (err: any) {
+    if (err instanceof PrismaClientValidationError) {
+      return res.status(400).json({ error: "Invalid fields" });
+    }
+    res.status(500).json({ error: "An unexpected error occurred" });
+  }
+};
+
+// @Route   DELETE /api/user/
+// Deletes the current user
+export const deleteCurrentUser = async (
+  req: authenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user = await userService.deleteUser(req.userId as number);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (err: any) {
+    console.log(err);
     res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
