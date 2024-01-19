@@ -32,7 +32,7 @@ model PracticeSession {
   startTime         DateTime @default(now())
   endTime           DateTime 
   userId            Int
-  user              User     @relation(fields: [userId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   duration          Int // in seconds
 
   // Ratings
@@ -50,7 +50,7 @@ model Note {
   title           String
   content         String
   practiceId      Int
-  practiceSession PracticeSession @relation(fields: [practiceId], references: [id])
+  practiceSession PracticeSession @relation(fields: [practiceId], references: [id], onDelete: Cascade)
 }
 
 model Recording {
@@ -59,6 +59,6 @@ model Recording {
   filename     String
   alias        String
   userId       Int
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, filename])
 }
