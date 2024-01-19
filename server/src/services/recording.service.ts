@@ -3,15 +3,7 @@ import { db } from "../db/db.server";
 
 // Returns a list of all recordings
 export const getAllRecordings = async (): Promise<Recording[]> => {
-  return db.recording.findMany({
-    select: {
-      id: true,
-      filename: true,
-      date: true,
-      userId: true,
-      alias: true,
-    },
-  });
+  return db.recording.findMany();
 };
 
 // Returns a recording by id

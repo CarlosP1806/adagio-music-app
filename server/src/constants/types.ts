@@ -13,8 +13,13 @@ export type PracticeSession = {
   id: number;
   startTime: Date;
   endTime: Date;
-  satisfaction: number;
   userId: number;
+  duration: number;
+  satisfactionScore: number;
+  comfortScore: number;
+  difficultyScore: number;
+  techniqueScore: number;
+  musicalityScore: number;
 };
 
 export type Recording = {
