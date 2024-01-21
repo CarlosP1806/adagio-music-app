@@ -3,7 +3,7 @@ import * as practiceSessionService from "../services/practiceSession.service";
 import { authenticatedRequest } from "../utils/auth";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
-// Route  GET /api/practice-session
+// @Route  GET /api/practice-session
 // Return all the practice sessions
 export const getAllSessions = async (req: Request, res: Response) => {
   try {
@@ -14,7 +14,7 @@ export const getAllSessions = async (req: Request, res: Response) => {
   }
 };
 
-// Route  POST /api/practice-session/
+// @Route  POST /api/practice-session/
 // Create a new practice session for the logged in user
 export const createSession = async (
   req: authenticatedRequest,
@@ -40,7 +40,7 @@ export const createSession = async (
   }
 };
 
-// Route  PUT /api/practice-session/:id
+// @Route  PUT /api/practice-session/:id
 // Update a practice session
 export const updateSession = async (
   req: authenticatedRequest,
@@ -76,7 +76,7 @@ export const updateSession = async (
   }
 };
 
-// Route  DELETE /api/practice-session/:id
+// @Route  DELETE /api/practice-session/:id
 // Delete a practice session
 export const deleteSession = async (
   req: authenticatedRequest,
@@ -105,3 +105,4 @@ export const deleteSession = async (
     return res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
+

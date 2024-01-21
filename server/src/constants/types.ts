@@ -17,9 +17,7 @@ export type PracticeSession = {
   duration: number;
   satisfactionScore: number;
   comfortScore: number;
-  difficultyScore: number;
-  techniqueScore: number;
-  musicalityScore: number;
+  challengeScore: number;
 };
 
 export type Recording = {
@@ -28,4 +26,11 @@ export type Recording = {
   date: Date;
   userId: number;
   alias: string;
+};
+
+export type Note = {
+  id: number;
+  title: string;
+  content: string;
+  sessionId: number;
 };
