@@ -38,9 +38,7 @@ model PracticeSession {
   // Ratings
   satisfactionScore Int
   comfortScore      Int
-  difficultyScore   Int
-  techniqueScore    Int
-  musicalityScore   Int
+  challengeScore   Int
 
   notes             Note[]
 }

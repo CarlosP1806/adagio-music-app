@@ -17,9 +17,7 @@ export type PracticeSession = {
   duration: number;
   satisfactionScore: number;
   comfortScore: number;
-  difficultyScore: number;
-  techniqueScore: number;
-  musicalityScore: number;
+  challengeScore: number;
 };
 
 export type Recording = {
