@@ -1,15 +1,17 @@
 import { Router } from "express";
 import {
   createSession,
-  createSessionNote,
   deleteSession,
-  deleteSessionNote,
   getAllSessions,
-  getSessionNotes,
   updateSession,
-  updateSessionNote,
 } from "../controllers/practiceSession.controller";
 import { authMiddleware } from "../utils/auth";
+import { 
+  createSessionNote, 
+  deleteSessionNote, 
+  getSessionNotes, 
+  updateSessionNote 
+} from "../controllers/note.controller";
 
 export const router = Router();
 
