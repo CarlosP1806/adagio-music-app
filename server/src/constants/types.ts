@@ -29,3 +29,10 @@ export type Recording = {
   userId: number;
   alias: string;
 };
+
+export type Note = {
+  id: number;
+  title: string;
+  content: string;
+  sessionId: number;
+};
