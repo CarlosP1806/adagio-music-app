@@ -5,8 +5,10 @@ export function signup(user: UserSignupInputs) {
   return baseApi.post("/user/sigunp", user).then((res) => res.data);
 }
 
-export function login(username: string, passord: string) {
-  return baseApi.post("/user/login", { username, passord }).then((res) => res.data);
+export function login(username: string, password: string) {
+  return baseApi
+    .post("/user/login", { username, password })
+    .then((res) => res.data);
 }
 
 export function getLoggedInUser() {

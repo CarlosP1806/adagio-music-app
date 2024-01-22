@@ -43,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function login(username: string, password: string) {
     return authService.login(username, password).then((res) => {
-      setUser({ id: res.id, username: res.username });
+      setUser({ id: res.user.id, username: res.user.username });
       navigate("/");
     });
   }
