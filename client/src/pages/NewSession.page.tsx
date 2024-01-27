@@ -3,19 +3,16 @@ import SessionTimer from "../features/practice-session/components/SessionTimer";
 import { useStopwatch } from "react-timer-hook";
 import { Flex } from "@chakra-ui/react";
 import RecordButton from "../features/recording/components/RecordButton";
-import { useState } from "react";
 
 function NewSession() {
   const { totalSeconds, seconds, minutes, hours, start, pause } = useStopwatch({
     autoStart: true,
   });
 
-  const [audioData, setAudioData] = useState(null);
-
   return (
     <>
       <AuthLayout title="New Session">
-        <Flex justify="center" pt="3rem">
+        <Flex justify="center" mt="5rem" direction="column" align="center">
           <SessionTimer
             seconds={seconds}
             minutes={minutes}
@@ -23,9 +20,8 @@ function NewSession() {
             pause={pause}
             start={start}
           />
+          <RecordButton />
         </Flex>
-        <RecordButton />
-        <div>ee: {audioData}</div>
       </AuthLayout>
     </>
   );

@@ -1,12 +1,27 @@
-import { Button, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { uploadToCloud } from "../services/recording.services";
 
 function RecordButton() {
-  const [audioData, setAudioData] = useState<string>("");
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function enableStream() {
     try {
@@ -19,16 +34,10 @@ function RecordButton() {
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
+        const blob = new Blob(audioChunksRef.current, {
           type: "audio/wav",
         });
-        setAudioData(URL.createObjectURL(audioBlob));
-
-        const formData = new FormData();
-        formData.append("file", audioBlob, "recording2.wav");
-        formData.append("alias", "test");
-        await uploadToCloud(formData);
-
+        setAudioBlob(blob);
         audioChunksRef.current = [];
       };
     } catch (err) {
@@ -58,15 +67,88 @@ function RecordButton() {
     if (!mediaRecorderRef.current) return;
     mediaRecorderRef.current.stop();
     setRecording(false);
+    onOpen();
+  };
+
+  const uploadRecording = async (filename: string) => {
+    if (!audioBlob) return;
+
+    const formData = new FormData();
+    formData.append("file", audioBlob, `${filename}.wav`);
+    formData.append("alias", "test");
+    await uploadToCloud(formData);
   };
 
   return (
     <>
-      <Button onClick={recording ? stopRecording : startRecording}>
-        <Text>{recording ? "Stop" : "Record"}</Text>
-      </Button>
-      {audioData && <audio src={audioData} controls />}
+      <Box
+        mt="2rem"
+        onClick={recording ? stopRecording : startRecording}
+        backgroundColor="#FF6E9D"
+        width="5rem"
+        height="5rem"
+        borderRadius="full"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Image
+          src={recording ? "/stop-button.png" : "/record-button.png"}
+          boxSize="2.5rem"
+        />
+      </Box>
+      <SaveRecordingModal
+        open={isOpen}
+        onClose={onClose}
+        onSubmitRecording={uploadRecording}
+      />
     </>
+  );
+}
+
+interface SaveRecordingModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmitRecording: (filename: string) => void;
+}
+
+function SaveRecordingModal({
+  open,
+  onClose,
+  onSubmitRecording,
+}: SaveRecordingModalProps) {
+  const [filename, setFilename] = useState("");
+
+  function handleSubmit() {
+    onSubmitRecording(filename);
+    console.log(filename);
+    onClose();
+  }
+
+  return (
+    <Modal isOpen={open} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent width="80%">
+        <ModalHeader>Save Recording</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Input
+            placeholder="Filename"
+            onChange={(e) => setFilename(e.target.value)}
+            value={filename}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            backgroundColor="#FF6E9D"
+            color="whitesmoke"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
