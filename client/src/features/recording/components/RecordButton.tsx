@@ -56,28 +56,27 @@ function RecordButton() {
     };
   }, []);
 
-  const startRecording = () => {
+  function startRecording() {
     if (!mediaRecorderRef.current) return;
     audioChunksRef.current = [];
     mediaRecorderRef.current.start();
     setRecording(true);
-  };
+  }
 
-  const stopRecording = () => {
+  function stopRecording() {
     if (!mediaRecorderRef.current) return;
     mediaRecorderRef.current.stop();
     setRecording(false);
     onOpen();
-  };
+  }
 
-  const uploadRecording = async (filename: string) => {
+  async function uploadRecording(filename: string) {
     if (!audioBlob) return;
 
     const formData = new FormData();
     formData.append("file", audioBlob, `${filename}.wav`);
-    formData.append("alias", "test");
     await uploadToCloud(formData);
-  };
+  }
 
   return (
     <>
