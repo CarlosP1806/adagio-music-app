@@ -26,7 +26,6 @@ export const createRecording = async (
       filename: recording.filename,
       date: recording.date,
       userId: recording.userId,
-      alias: recording.alias,
     },
   });
 };

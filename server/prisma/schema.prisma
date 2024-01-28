@@ -55,7 +55,6 @@ model Recording {
   id           Int      @id @default(autoincrement())
   date         DateTime @default(now())
   filename     String
-  alias        String
   userId       Int
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, filename])
