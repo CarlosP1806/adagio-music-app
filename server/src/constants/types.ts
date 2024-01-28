@@ -25,7 +25,6 @@ export type Recording = {
   filename: string;
   date: Date;
   userId: number;
-  alias: string;
 };
 
 export type Note = {
